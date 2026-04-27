@@ -178,7 +178,7 @@ export const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const getUserActivities = (userId: string) =>
     activities.filter((a) => (a.currentParticipants ?? []).includes(userId));
 
-  const addComment = async (activityId: string, comment: Comment) => {
+  const addComment = async (activityId: string, comment: Comment) => {// No optimistic update for comments, as they are more likely to be edited/deleted by the user shortly after posting, and we want to ensure the ID is correct from the start. Instead, we reload after posting.
     const newComment = { ...comment, createdAt: new Date().toISOString() };
     try {
       await activitiesApi.addComment(activityId, { userId: comment.userId, userName: comment.userName, content: comment.content });
