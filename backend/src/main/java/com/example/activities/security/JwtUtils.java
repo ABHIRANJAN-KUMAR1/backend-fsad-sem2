@@ -22,7 +22,6 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     private SecretKey getSigningKey() {
-        // Ensure secret is long enough (at least 32 bytes)
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {
             throw new IllegalArgumentException(
@@ -56,9 +55,7 @@ public class JwtUtils {
     }
 
     public boolean isTokenValid(String token) {
-        if (token == null || token.isBlank()) {
-            return false;
-        }
+        if (token == null || token.isBlank()) return false;
         try {
             return !isTokenExpired(token);
         } catch (Exception ex) {
