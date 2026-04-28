@@ -24,18 +24,10 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write("{\"error\":\"Unauthorized\"}");
-            }))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
-                .requestMatchers("/api/ping", "/error").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/**").permitAll() // 🔥 IMPORTANT
             );
+
         return http.build();
     }
 
