@@ -59,7 +59,19 @@ public class AuthController {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+        //user.setRole(request.getRole());
+        System.out.println("ROLE FROM FRONTEND: " + request.getRole());
+
+String role = request.getRole();
+
+if (role == null || role.isBlank()) {
+    role = "student";
+} else {
+    role = role.toLowerCase();
+}
+
+user.setRole(role);
+        
         user.setIsVerified(false);
         user.setIsActive(false);
         user = userService.save(user);
