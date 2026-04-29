@@ -96,13 +96,23 @@ public class ApiExceptionHandler {
                 .body(Map.of("error", "Invalid request format. Please check your JSON syntax."));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
-        log.error("Unexpected error", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", "An internal server error occurred. Please try again later."));
-    }
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+    //     log.error("Unexpected error", ex);
+    //     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(Map.of("error", "An internal server error occurred. Please try again later."));
+    // }
+@ExceptionHandler(Exception.class)
+public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+    log.error("Unexpected error", ex);
 
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(Map.of(
+                "error", ex.getMessage(),   // 👈 show real error
+                "type", ex.getClass().getSimpleName()
+            ));
+}
+    
     private static String formatFieldError(FieldError fe) {
         return fe.getField() + ": " + fe.getDefaultMessage();
     }
